@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/product.css" />
+  </head>
+  <body>
+    <%- include('../includes/nav.ejs') %>
+    <main>
+      <form
+        action="<%= editing ? "/admin/edit-product" : "/admin/add-product" %>"
+        method="POST"
+        class="product-form"
+      >
+        <div class="form-control">
+          <label for="name">Name of the product:</label>
+          <input type="text" name="name" id="name" value="<%= editing ? product.name : null %>" />
+        </div>
+        <div class="form-control">
+          <label for="price">Price of the product:</label>
+          <input type="number" name="price" id="price" step="0.01" value="<%= editing ? product.price : null %>" />
+        </div>
+        <div class="form-control">
+          <label for="image">Link to the image:</label>
+          <input type="text" name="image" id="image" value="<%= editing ? product.image : null %>" />
+        </div>
+        <div class="form-control">
+          <label for="description">Description:</label>
+          <textarea name="description" id="description" rows="5"><%= editing ? product.description : null %></textarea>
+        </div>
+        <% if (editing) { %>
+            <input type="hidden" value=<%= product.id %>  name="productID"/> 
+            <% } %>
+        <button type="submit" class="btn">
+          <%= editing ? "Update product" : 'Add product' %>
+        </button>
+      </form>
+    </main>
+    <%- include('../includes/scripts.ejs') %>
+  </body>
+</html>

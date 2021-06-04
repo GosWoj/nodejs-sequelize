@@ -2,17 +2,26 @@ import { Product } from "../models/product.js";
 import Cart from "../models/cart.js";
 
 export const getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  // Product.fetchAll()
+  //   .then(([rows, fieldData]) => {
+  //     res.render("shop/index", {
+  //       path: "/",
+  //       pageTitle: "Shop",
+  //       products: rows,
+  //     });
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  Product.findAll()
+    .then((products) => {
       res.render("shop/index", {
         path: "/",
         pageTitle: "Shop",
-        products: rows,
+        products: products,
       });
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => console.log(error));
 };
 
 export const getProduct = (req, res, next) => {
@@ -28,20 +37,32 @@ export const getProduct = (req, res, next) => {
 };
 
 export const getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows]) => {
+  // Product.fetchAll()
+  //   .then(([rows]) => {
+  //     res.render("shop/product-list", {
+  //       path: "/products",
+  //       pageTitle: "Products",
+  //       products: rows,
+  //       hasProducts: rows.length > 0,
+  //       activeShop: true,
+  //       productCSS: true,
+  //     });
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  Product.findAll()
+    .then((products) => {
       res.render("shop/product-list", {
         path: "/products",
         pageTitle: "Products",
-        products: rows,
-        hasProducts: rows.length > 0,
+        products: products,
+        hasProducts: products.length > 0,
         activeShop: true,
         productCSS: true,
       });
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => console.log(error));
 };
 
 export const getCart = (req, res, next) => {

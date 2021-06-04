@@ -176,3 +176,9 @@ textarea {
     display: none;
   }
 }
+.image {
+  max-height: 30rem;
+}
+.image img {
+  height: 100%;
+}

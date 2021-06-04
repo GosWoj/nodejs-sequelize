@@ -26,14 +26,32 @@ export const getIndex = (req, res, next) => {
 
 export const getProduct = (req, res, next) => {
   const id = req.params.id;
-  Product.fetchProduct(id)
-    .then(([product]) => {
+  // Product.fetchProduct(id)
+  //   .then(([product]) => {
+  //     res.render("shop/product", {
+  //       pageTitle: product[0].name,
+  //       product: product[0],
+  //     });
+  //   })
+  //   .catch((error) => console.log(error));
+  Product.findByPk(id)
+    .then((product) => {
       res.render("shop/product", {
-        pageTitle: product[0].name,
-        product: product[0],
+        pageTitle: product.name,
+        product: product,
       });
     })
     .catch((error) => console.log(error));
+
+  //Can also look for product using restriction as "where"
+  // Product.findAll({ where: { id: id } })
+  //   .then((products) => {
+  //     res.render("shop/product", {
+  //       pageTitle: products[0].name,
+  //       product: products[0],
+  //     });
+  //   })
+  //   .catch((error) => console.log(error));
 };
 
 export const getProducts = (req, res, next) => {

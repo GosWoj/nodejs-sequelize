@@ -7,6 +7,8 @@ import { getErrorPage } from "./controllers/error.js";
 import { sequelize } from "./util/database.js";
 import { Product } from "./models/product.js";
 import { User } from "./models/user.js";
+import { Cart } from "./models/cart.js";
+import { CartItem } from "./models/cart-item.js";
 
 const app = express();
 
@@ -23,7 +25,7 @@ app.use(express.static(path.join(__direname, "public")));
 //Creating middleware, so I can use User created at the bottom
 //anywhere in the app
 app.use((req, res, next) => {
-  User.findByPk(6)
+  User.findByPk(1)
     .then((user) => {
       req.user = user;
       next();
@@ -45,6 +47,14 @@ Product.belongsTo(User, {
   onDelete: "CASCADE",
 });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, {
+  through: CartItem,
+});
+Product.belongsToMany(Cart, {
+  through: CartItem,
+});
 
 //It syncs the models to the database
 sequelize
@@ -57,7 +67,7 @@ sequelize
   // })
   .then((data) => {
     // console.log(data);
-    return User.findByPk(6);
+    return User.findByPk(1);
   })
   .then((user) => {
     if (!user) {
@@ -74,6 +84,17 @@ sequelize
   })
   .then((user) => {
     // console.log(user);
+    //Creating dummy cart
+    // return user.createCart();
+    user.getCart().then((cart) => {
+      if (cart) {
+        return cart;
+      } else {
+        return user.createCart();
+      }
+    });
+  })
+  .then((cart) => {
     app.listen(3000);
   })
   .catch((error) => console.log(error));

@@ -10,7 +10,7 @@
 }
 .form-control input,
 .form-control textarea {
-  border: 1px solid rgb(235, 175, 198);
+  border: 1px solid #1976d2;
   font: inherit;
   border-radius: 2px;
 }

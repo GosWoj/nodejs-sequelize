@@ -13,19 +13,29 @@ export const postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const image = req.body.image;
   const description = req.body.description;
-  // const product = new Product(null, name, price, image, description);
-  // product
-  //   .save()
-  //   .then(() => {
-  //     res.redirect("/");
-  //   })
-  //   .catch((error) => console.log(error));
-  Product.create({
-    name: name,
-    price,
-    image,
-    description,
-  })
+  //Sequelize provides method that allows to create association
+  req.user
+    .createProduct({
+      name: name,
+      price,
+      image,
+      description,
+    })
+    // const product = new Product(null, name, price, image, description);
+    // product
+    //   .save()
+    //   .then(() => {
+    //     res.redirect("/");
+    //   })
+    //   .catch((error) => console.log(error));
+
+    // Product.create({
+    //   name: name,
+    //   price,
+    //   image,
+    //   description,
+    //   userId: req.user.id,
+    // })
     .then((data) => {
       console.log("PRODUCT CREATED");
       res.redirect("/admin/products");
@@ -53,8 +63,18 @@ export const getEditProduct = (req, res, next) => {
   //     product: product,
   //   });
   // });
-  Product.findByPk(id)
-    .then((product) => {
+
+  //Finding products just for currently logged user
+  req.user
+    .getProducts({
+      where: {
+        id: id,
+      },
+    })
+    // Product.findByPk(id)
+    .then((products) => {
+      //.getProducts() returns array
+      const product = products[0];
       if (!product) {
         return res.redirect("/");
       }
@@ -111,7 +131,11 @@ export const getProducts = (req, res, next) => {
   //     products: products,
   //   });
   // });
-  Product.findAll()
+
+  //Finding products just for the user
+  req.user
+    .getProducts()
+    // Product.findAll()
     .then((products) => {
       res.render("admin/products", {
         path: "/admin/products",

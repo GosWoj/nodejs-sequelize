@@ -9,6 +9,8 @@ import { Product } from "./models/product.js";
 import { User } from "./models/user.js";
 import { Cart } from "./models/cart.js";
 import { CartItem } from "./models/cart-item.js";
+import { Order } from "./models/order.js";
+import { OrderItem } from "./models/order-item.js";
 
 const app = express();
 
@@ -54,6 +56,14 @@ Cart.belongsToMany(Product, {
 });
 Product.belongsToMany(Cart, {
   through: CartItem,
+});
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {
+  through: OrderItem,
+});
+Product.belongsToMany(Order, {
+  through: OrderItem,
 });
 
 //It syncs the models to the database
